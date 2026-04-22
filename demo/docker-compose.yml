@@ -1,0 +1,34 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: proyecto1_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: proyecto1
+      MYSQL_ROOT_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: proyecto1_app
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/proyecto1
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - "8080:8080"
+
+volumes:
+  mysql_data:
