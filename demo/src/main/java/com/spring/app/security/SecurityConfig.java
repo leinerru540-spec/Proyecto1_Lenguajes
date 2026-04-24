@@ -41,7 +41,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         // Login y recursos publicos.
-                        .requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/auth/**", "/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
 
                         // El administrador tiene acceso completo a los modulos principales.
                         .requestMatchers("/usuarios/**", "/roles/**", "/clientes/**", "/consultorias/**")

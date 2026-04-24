@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.app.Controller;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,10 +57,14 @@ public class AuthController {
         // Con los datos del usuario autenticado se genera el token JWT.
         // El token llevara el email como subject y una fecha de expiracion.
         String token = jwtUtil.generateToken(userDetails);
+        String rol = userDetails.getAuthorities().stream()
+                .findFirst()
+                .map(authority -> authority.getAuthority().replace("ROLE_", ""))
+                .orElse("");
 
         // El cliente debe enviar este token en las siguientes solicitudes:
         // Authorization: Bearer <token>
-        return new AuthResponse(token);
+        return new AuthResponse(token, rol);
     }
 }
 

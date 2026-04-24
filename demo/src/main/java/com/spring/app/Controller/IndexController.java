@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.app.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -23,5 +23,10 @@ public class IndexController {
     @GetMapping("/vista/solicitudes")
     public String solicitudes() {
         return "solicitudes";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 }
