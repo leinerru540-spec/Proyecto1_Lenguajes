@@ -27,7 +27,7 @@
                         <div class="card-body p-4 p-lg-5">
                             <span class="badge text-bg-primary mb-3">Modulo de consultorias</span>
                             <h1 class="h2 mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;" th:text="${formTitle}">Nueva consultoria</h1>
-                            <p class="text-secondary mb-4">Registra un servicio de consultoria disponible para que los clientes puedan solicitarlo.</p>
+                            <p class="text-secondary mb-4">Asocia la consultoria a un cliente y define su estado.</p>
 
                             <form th:action="${formAction}" th:object="${consultoriaForm}" method="post" class="row g-3">
                                 <div class="col-md-6">
@@ -39,6 +39,13 @@
                                     <select id="estado" th:field="*{estado}" class="form-select" required>
                                         <option value="">Selecciona un estado</option>
                                         <option th:each="estado : ${estadosConsultoria}" th:value="${estado.name()}" th:text="${estado.name()}"></option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="clienteId" class="form-label fw-semibold">Cliente</label>
+                                    <select id="clienteId" th:field="*{clienteId}" class="form-select" required>
+                                        <option value="">Selecciona un cliente</option>
+                                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre + ' - ' + (cliente.empresa != null and !#strings.isEmpty(cliente.empresa) ? cliente.empresa : 'Sin empresa')}"></option>
                                     </select>
                                 </div>
                                 <div class="col-12">

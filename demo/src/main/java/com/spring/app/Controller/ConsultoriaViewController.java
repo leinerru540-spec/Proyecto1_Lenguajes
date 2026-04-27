@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.app.Controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.app.dto.ConsultoriaForm;
+import com.spring.app.entity.Cliente;
 import com.spring.app.entity.Consultoria;
 import com.spring.app.entity.EstadoConsultoria;
+import com.spring.app.service.ClienteService;
 import com.spring.app.service.ConsultoriaService;
 
 @Controller
@@ -19,9 +21,11 @@ import com.spring.app.service.ConsultoriaService;
 public class ConsultoriaViewController {
 
     private final ConsultoriaService consultoriaService;
+    private final ClienteService clienteService;
 
-    public ConsultoriaViewController(ConsultoriaService consultoriaService) {
+    public ConsultoriaViewController(ConsultoriaService consultoriaService, ClienteService clienteService) {
         this.consultoriaService = consultoriaService;
+        this.clienteService = clienteService;
     }
 
     @GetMapping
@@ -55,6 +59,7 @@ public class ConsultoriaViewController {
         consultoriaForm.setTipo(consultoria.getTipo());
         consultoriaForm.setEstado(consultoria.getEstado().name());
         consultoriaForm.setDescripcion(consultoria.getDescripcion());
+        consultoriaForm.setClienteId(consultoria.getCliente().getId());
 
         cargarDatosFormulario(model);
         model.addAttribute("consultoriaForm", consultoriaForm);
@@ -78,14 +83,19 @@ public class ConsultoriaViewController {
     }
 
     private void cargarDatosFormulario(Model model) {
+        model.addAttribute("clientes", clienteService.findAll());
         model.addAttribute("estadosConsultoria", EstadoConsultoria.values());
     }
 
     private Consultoria mapToEntity(ConsultoriaForm consultoriaForm) {
+        Cliente cliente = clienteService.findById(consultoriaForm.getClienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + consultoriaForm.getClienteId()));
+
         Consultoria consultoria = new Consultoria();
         consultoria.setTipo(consultoriaForm.getTipo());
         consultoria.setEstado(EstadoConsultoria.valueOf(consultoriaForm.getEstado()));
         consultoria.setDescripcion(consultoriaForm.getDescripcion());
+        consultoria.setCliente(cliente);
         return consultoria;
     }
 }

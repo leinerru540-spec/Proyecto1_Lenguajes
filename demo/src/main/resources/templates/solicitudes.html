@@ -32,7 +32,7 @@
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
                     <span class="badge text-bg-primary mb-3">Modulo de solicitudes</span>
-                    <h1 class="display-6 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Controla las solicitudes enviadas por los clientes.</h1>
+                    <h1 class="display-6 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Controla las solicitudes del proceso de punta a punta.</h1>
                     <p class="lead text-secondary mb-0">
                         Esta vista usa el flujo MVC del proyecto para renderizar el listado
                         y procesar formularios desde el servidor.
@@ -72,28 +72,24 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
-                                    <th>Solicitante</th>
-                                    <th>Correo</th>
-                                    <th>Servicio</th>
                                     <th>Descripcion</th>
                                     <th>Estado</th>
                                     <th>Fecha</th>
-                                    <th>Usuario</th>
+                                    <th>Consultoria</th>
+                                    <th>Responsable</th>
                                     <th class="text-end">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:if="${#lists.isEmpty(solicitudes)}">
-                                    <td colspan="9" class="text-center text-secondary py-4">No hay solicitudes registradas todavia.</td>
+                                    <td colspan="7" class="text-center text-secondary py-4">No hay solicitudes registradas todavia.</td>
                                 </tr>
                                 <tr th:each="solicitud : ${solicitudes}">
                                     <td th:text="${solicitud.id}"></td>
-                                    <td th:text="${solicitud.nombreSolicitante}"></td>
-                                    <td th:text="${solicitud.correoSolicitante}"></td>
-                                    <td th:text="${solicitud.consultoria.tipo}"></td>
                                     <td th:text="${solicitud.descripcion}"></td>
                                     <td><span class="badge text-bg-light border" th:text="${solicitud.estado}"></span></td>
                                     <td th:text="${solicitud.fecha}"></td>
+                                    <td th:text="${solicitud.consultoria.tipo}"></td>
                                     <td th:text="${solicitud.usuario.nombre}"></td>
                                     <td class="text-end">
                                         <div class="d-inline-flex gap-2">

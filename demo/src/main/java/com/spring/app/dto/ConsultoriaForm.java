@@ -4,6 +4,7 @@ public class ConsultoriaForm {
     private String tipo;
     private String estado;
     private String descripcion;
+    private Long clienteId;
 
     public String getTipo() {
         return tipo;
@@ -29,4 +30,11 @@ public class ConsultoriaForm {
         this.descripcion = descripcion;
     }
 
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
 }

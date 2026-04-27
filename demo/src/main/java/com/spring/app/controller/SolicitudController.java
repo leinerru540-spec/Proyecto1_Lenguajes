@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.app.Controller;
 
 import com.spring.app.dto.SolicitudDTO;
 import com.spring.app.entity.Solicitud;
@@ -22,9 +22,6 @@ public class SolicitudController {
         return solicitudRepository.findAll().stream()
                 .map(s -> new SolicitudDTO(
                         s.getId(),
-                        s.getNombreSolicitante(),
-                        s.getCorreoSolicitante(),
-                        s.getTipoServicio(),
                         s.getDescripcion(),
                         s.getEstado().name(),
                         s.getFecha().toString(),
@@ -39,9 +36,6 @@ public class SolicitudController {
         return solicitudRepository.findById(id)
                 .map(s -> new SolicitudDTO(
                         s.getId(),
-                        s.getNombreSolicitante(),
-                        s.getCorreoSolicitante(),
-                        s.getTipoServicio(),
                         s.getDescripcion(),
                         s.getEstado().name(),
                         s.getFecha().toString(),
@@ -56,9 +50,6 @@ public class SolicitudController {
         Solicitud saved = solicitudRepository.save(solicitud);
         return new SolicitudDTO(
                 saved.getId(),
-                saved.getNombreSolicitante(),
-                saved.getCorreoSolicitante(),
-                saved.getTipoServicio(),
                 saved.getDescripcion(),
                 saved.getEstado().name(),
                 saved.getFecha().toString(),
@@ -73,9 +64,6 @@ public class SolicitudController {
         Solicitud updated = solicitudRepository.save(solicitud);
         return new SolicitudDTO(
                 updated.getId(),
-                updated.getNombreSolicitante(),
-                updated.getCorreoSolicitante(),
-                updated.getTipoServicio(),
                 updated.getDescripcion(),
                 updated.getEstado().name(),
                 updated.getFecha().toString(),

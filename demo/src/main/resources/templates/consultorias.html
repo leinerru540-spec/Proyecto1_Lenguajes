@@ -32,7 +32,7 @@
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
                     <span class="badge text-bg-primary mb-3">Modulo de consultorias</span>
-                    <h1 class="display-6 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Gestiona los servicios de consultoria disponibles.</h1>
+                    <h1 class="display-6 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Gestiona el ciclo completo de cada consultoria.</h1>
                     <p class="lead text-secondary mb-0">
                         La vista se renderiza desde el backend y usa la capa `service`
                         que ya existia en el proyecto.
@@ -44,7 +44,7 @@
                             <h2 class="h5 mb-3" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Acciones rapidas</h2>
                             <div class="d-grid gap-2">
                                 <a href="/vista/consultorias/nueva" class="btn btn-primary">Nueva consultoria</a>
-                                <a href="/vista/solicitudes" class="btn btn-outline-secondary">Ver solicitudes</a>
+                                <a href="/vista/clientes" class="btn btn-outline-secondary">Explorar clientes</a>
                             </div>
                         </div>
                     </div>
@@ -73,6 +73,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Tipo</th>
+                                    <th>Cliente</th>
                                     <th>Estado</th>
                                     <th>Descripcion</th>
                                     <th class="text-end">Acciones</th>
@@ -80,11 +81,12 @@
                             </thead>
                             <tbody>
                                 <tr th:if="${#lists.isEmpty(consultorias)}">
-                                    <td colspan="5" class="text-center text-secondary py-4">No hay consultorias registradas todavia.</td>
+                                    <td colspan="6" class="text-center text-secondary py-4">No hay consultorias registradas todavia.</td>
                                 </tr>
                                 <tr th:each="consultoria : ${consultorias}">
                                     <td th:text="${consultoria.id}"></td>
                                     <td th:text="${consultoria.tipo}"></td>
+                                    <td th:text="${consultoria.cliente.nombre}"></td>
                                     <td><span class="badge text-bg-light border" th:text="${consultoria.estado}"></span></td>
                                     <td th:text="${consultoria.descripcion}"></td>
                                     <td class="text-end">

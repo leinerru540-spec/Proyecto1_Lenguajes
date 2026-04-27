@@ -36,9 +36,6 @@ public class SolicitudService {
         Solicitud solicitudExistente = solicitudRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada con id: " + id));
 
-        solicitudExistente.setNombreSolicitante(solicitudActualizada.getNombreSolicitante());
-        solicitudExistente.setCorreoSolicitante(solicitudActualizada.getCorreoSolicitante());
-        solicitudExistente.setTipoServicio(solicitudActualizada.getTipoServicio());
         solicitudExistente.setDescripcion(solicitudActualizada.getDescripcion());
         solicitudExistente.setEstado(solicitudActualizada.getEstado());
         solicitudExistente.setFecha(solicitudActualizada.getFecha());

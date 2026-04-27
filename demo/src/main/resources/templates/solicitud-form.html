@@ -27,17 +27,9 @@
                         <div class="card-body p-4 p-lg-5">
                             <span class="badge text-bg-primary mb-3">Modulo de solicitudes</span>
                             <h1 class="h2 mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;" th:text="${formTitle}">Nueva solicitud</h1>
-                            <p class="text-secondary mb-4">Registra la peticion del cliente y selecciona el servicio de consultoria que necesita.</p>
+                            <p class="text-secondary mb-4">Relaciona la solicitud con una consultoria y un usuario responsable.</p>
 
                             <form th:action="${formAction}" th:object="${solicitudForm}" method="post" class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nombreSolicitante" class="form-label fw-semibold">Nombre del solicitante</label>
-                                    <input id="nombreSolicitante" th:field="*{nombreSolicitante}" class="form-control" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="correoSolicitante" class="form-label fw-semibold">Correo del solicitante</label>
-                                    <input id="correoSolicitante" th:field="*{correoSolicitante}" type="email" class="form-control" required>
-                                </div>
                                 <div class="col-md-6">
                                     <label for="estado" class="form-label fw-semibold">Estado</label>
                                     <select id="estado" th:field="*{estado}" class="form-select" required>
@@ -50,21 +42,21 @@
                                     <input id="fecha" th:field="*{fecha}" type="date" class="form-control" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="consultoriaId" class="form-label fw-semibold">Servicio solicitado</label>
+                                    <label for="consultoriaId" class="form-label fw-semibold">Consultoria</label>
                                     <select id="consultoriaId" th:field="*{consultoriaId}" class="form-select" required>
-                                        <option value="">Selecciona un servicio</option>
-                                        <option th:each="consultoria : ${consultorias}" th:value="${consultoria.id}" th:text="${consultoria.tipo}"></option>
+                                        <option value="">Selecciona una consultoria</option>
+                                        <option th:each="consultoria : ${consultorias}" th:value="${consultoria.id}" th:text="${consultoria.tipo + ' - ' + consultoria.cliente.nombre}"></option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="usuarioId" class="form-label fw-semibold">Usuario solicitante</label>
+                                    <label for="usuarioId" class="form-label fw-semibold">Responsable</label>
                                     <select id="usuarioId" th:field="*{usuarioId}" class="form-select" required>
                                         <option value="">Selecciona un usuario</option>
                                         <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre + ' - ' + usuario.email}"></option>
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <label for="descripcion" class="form-label fw-semibold">Mensaje o descripcion de la solicitud</label>
+                                    <label for="descripcion" class="form-label fw-semibold">Descripcion</label>
                                     <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="4" required></textarea>
                                 </div>
                                 <div class="col-12 d-flex gap-2 pt-2">

@@ -5,11 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.spring.app.entity.NombreRol;
-import com.spring.app.entity.Consultoria;
-import com.spring.app.entity.EstadoConsultoria;
 import com.spring.app.entity.Rol;
 import com.spring.app.entity.Usuario;
-import com.spring.app.repository.ConsultoriaRepository;
 import com.spring.app.repository.RolRepository;
 import com.spring.app.repository.UsuarioRepository;
 
@@ -19,7 +16,6 @@ public class DataInitializer implements CommandLineRunner {
     // Repositorios usados para consultar y guardar roles/usuarios al iniciar la aplicacion.
     private final RolRepository rolRepository;
     private final UsuarioRepository usuarioRepository;
-    private final ConsultoriaRepository consultoriaRepository;
 
     // Codificador usado para guardar contrasenas cifradas con BCrypt.
     private final PasswordEncoder passwordEncoder;
@@ -27,11 +23,9 @@ public class DataInitializer implements CommandLineRunner {
     public DataInitializer(
             RolRepository rolRepository,
             UsuarioRepository usuarioRepository,
-            ConsultoriaRepository consultoriaRepository,
             PasswordEncoder passwordEncoder) {
         this.rolRepository = rolRepository;
         this.usuarioRepository = usuarioRepository;
-        this.consultoriaRepository = consultoriaRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -78,22 +72,6 @@ public class DataInitializer implements CommandLineRunner {
                     usuario.setRol(cliente);
                     return usuarioRepository.save(usuario);
                 });
-
-        crearConsultoriaBase("Legal", "Asesoria legal para pequenas empresas, contratos y cumplimiento normativo.");
-        crearConsultoriaBase("Ambiental", "Asesoria ambiental para permisos, gestion de requisitos y cumplimiento.");
-        crearConsultoriaBase("Industrial", "Asesoria industrial para procesos, seguridad y mejora operativa.");
-    }
-
-    private void crearConsultoriaBase(String tipo, String descripcion) {
-        boolean existe = consultoriaRepository.findAll().stream()
-                .anyMatch(consultoria -> consultoria.getTipo().equalsIgnoreCase(tipo));
-
-        if (!existe) {
-            Consultoria consultoria = new Consultoria();
-            consultoria.setTipo(tipo);
-            consultoria.setDescripcion(descripcion);
-            consultoria.setEstado(EstadoConsultoria.PENDIENTE);
-            consultoriaRepository.save(consultoria);
-        }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.app.Controller;
 
 import com.spring.app.dto.ConsultoriaDTO;
 import com.spring.app.entity.Consultoria;
@@ -24,7 +24,8 @@ public class ConsultoriaController {
                         c.getId(),
                         c.getTipo(),
                         c.getEstado().name(),
-                        c.getDescripcion()
+                        c.getDescripcion(),
+                        c.getCliente().getId()
                 ))
                 .toList();
     }
@@ -36,7 +37,8 @@ public class ConsultoriaController {
                         c.getId(),
                         c.getTipo(),
                         c.getEstado().name(),
-                        c.getDescripcion()
+                        c.getDescripcion(),
+                        c.getCliente().getId()
                 ))
                 .orElse(null);
     }
@@ -48,7 +50,8 @@ public class ConsultoriaController {
                 saved.getId(),
                 saved.getTipo(),
                 saved.getEstado().name(),
-                saved.getDescripcion()
+                saved.getDescripcion(),
+                saved.getCliente().getId()
         );
     }
 
@@ -60,7 +63,8 @@ public class ConsultoriaController {
                 updated.getId(),
                 updated.getTipo(),
                 updated.getEstado().name(),
-                updated.getDescripcion()
+                updated.getDescripcion(),
+                updated.getCliente().getId()
         );
     }
 

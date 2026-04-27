@@ -1,4 +1,4 @@
-package com.spring.app.controller;
+package com.spring.app.Controller;
 
 import java.time.LocalDate;
 
@@ -65,9 +65,6 @@ public class SolicitudViewController {
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada con id: " + id));
 
         SolicitudForm solicitudForm = new SolicitudForm();
-        solicitudForm.setNombreSolicitante(solicitud.getNombreSolicitante());
-        solicitudForm.setCorreoSolicitante(solicitud.getCorreoSolicitante());
-        solicitudForm.setTipoServicio(solicitud.getTipoServicio());
         solicitudForm.setDescripcion(solicitud.getDescripcion());
         solicitudForm.setEstado(solicitud.getEstado().name());
         solicitudForm.setFecha(solicitud.getFecha().toString());
@@ -108,9 +105,6 @@ public class SolicitudViewController {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + solicitudForm.getUsuarioId()));
 
         Solicitud solicitud = new Solicitud();
-        solicitud.setNombreSolicitante(solicitudForm.getNombreSolicitante());
-        solicitud.setCorreoSolicitante(solicitudForm.getCorreoSolicitante());
-        solicitud.setTipoServicio(consultoria.getTipo());
         solicitud.setDescripcion(solicitudForm.getDescripcion());
         solicitud.setEstado(EstadoSolicitud.valueOf(solicitudForm.getEstado()));
         solicitud.setFecha(LocalDate.parse(solicitudForm.getFecha()));
