@@ -4,13 +4,9 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -28,16 +24,8 @@ public class Consultoria {
     @Column(nullable = false)
     private String tipo;   // legal, ambiental, industrial
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EstadoConsultoria estado;
-
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descripcion;
-
-    @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
 
     @OneToMany(mappedBy = "consultoria")
     private List<Solicitud> solicitudes;

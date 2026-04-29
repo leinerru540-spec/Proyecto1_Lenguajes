@@ -20,6 +20,10 @@ public class SolicitudService {
         return solicitudRepository.findAll();
     }
 
+    public List<Solicitud> findBySolicitante(String email) {
+        return solicitudRepository.findByUsuario_EmailOrCorreoSolicitante(email, email);
+    }
+
     public Solicitud save(Solicitud solicitud) {
         return solicitudRepository.save(solicitud);
     }
@@ -37,8 +41,11 @@ public class SolicitudService {
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada con id: " + id));
 
         solicitudExistente.setDescripcion(solicitudActualizada.getDescripcion());
+        solicitudExistente.setNombreSolicitante(solicitudActualizada.getNombreSolicitante());
+        solicitudExistente.setCorreoSolicitante(solicitudActualizada.getCorreoSolicitante());
         solicitudExistente.setEstado(solicitudActualizada.getEstado());
         solicitudExistente.setFecha(solicitudActualizada.getFecha());
+        solicitudExistente.setCliente(solicitudActualizada.getCliente());
         solicitudExistente.setConsultoria(solicitudActualizada.getConsultoria());
         solicitudExistente.setUsuario(solicitudActualizada.getUsuario());
 

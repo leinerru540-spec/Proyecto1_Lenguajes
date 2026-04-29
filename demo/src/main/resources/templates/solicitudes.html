@@ -18,10 +18,11 @@
             </button>
             <div class="collapse navbar-collapse" id="solicitudesNav">
                 <ul class="navbar-nav ms-auto gap-lg-2">
-                    <li class="nav-item"><a class="nav-link" href="/vista/clientes">Clientes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/vista/consultorias">Consultorias</a></li>
+                    <li class="nav-item" th:if="${isAdmin}"><a class="nav-link" href="/vista/clientes">Clientes</a></li>
+                    <li class="nav-item" th:if="${isAdmin}"><a class="nav-link" href="/vista/consultorias">Consultorias</a></li>
+                    <li class="nav-item" th:unless="${isAdmin}"><a class="nav-link" href="/vista/servicios">Servicios</a></li>
                     <li class="nav-item"><a class="nav-link active" href="/vista/solicitudes">Solicitudes</a></li>
-                    <li class="nav-item"><a class="btn btn-outline-primary" href="/">Inicio</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-danger" href="/auth/logout">Cerrar sesion</a></li>
                 </ul>
             </div>
         </div>
@@ -44,7 +45,8 @@
                             <h2 class="h5 mb-3" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Acciones rapidas</h2>
                             <div class="d-grid gap-2">
                                 <a href="/vista/solicitudes/nueva" class="btn btn-primary">Nueva solicitud</a>
-                                <a href="/vista/consultorias" class="btn btn-outline-secondary">Ver consultorias</a>
+                                <a th:if="${isAdmin}" href="/vista/consultorias" class="btn btn-outline-secondary">Ver consultorias</a>
+                                <a th:unless="${isAdmin}" href="/vista/servicios" class="btn btn-outline-secondary">Ver servicios</a>
                             </div>
                         </div>
                     </div>
@@ -72,26 +74,30 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
+                                    <th>Solicitante</th>
+                                    <th>Correo</th>
+                                    <th th:if="${isAdmin}">Cliente</th>
                                     <th>Descripcion</th>
                                     <th>Estado</th>
                                     <th>Fecha</th>
-                                    <th>Consultoria</th>
-                                    <th>Responsable</th>
-                                    <th class="text-end">Acciones</th>
+                                    <th>Consultoria deseada</th>
+                                    <th class="text-end" th:if="${isAdmin}">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:if="${#lists.isEmpty(solicitudes)}">
-                                    <td colspan="7" class="text-center text-secondary py-4">No hay solicitudes registradas todavia.</td>
+                                    <td th:colspan="${isAdmin ? 9 : 7}" class="text-center text-secondary py-4">No hay solicitudes registradas todavia.</td>
                                 </tr>
                                 <tr th:each="solicitud : ${solicitudes}">
                                     <td th:text="${solicitud.id}"></td>
+                                    <td th:text="${solicitud.nombreSolicitante}"></td>
+                                    <td th:text="${solicitud.correoSolicitante}"></td>
+                                    <td th:if="${isAdmin}" th:text="${solicitud.cliente != null ? solicitud.cliente.nombre : 'Sin cliente'}"></td>
                                     <td th:text="${solicitud.descripcion}"></td>
                                     <td><span class="badge text-bg-light border" th:text="${solicitud.estado}"></span></td>
                                     <td th:text="${solicitud.fecha}"></td>
                                     <td th:text="${solicitud.consultoria.tipo}"></td>
-                                    <td th:text="${solicitud.usuario.nombre}"></td>
-                                    <td class="text-end">
+                                    <td class="text-end" th:if="${isAdmin}">
                                         <div class="d-inline-flex gap-2">
                                             <a class="btn btn-sm btn-outline-primary" th:href="@{/vista/solicitudes/editar/{id}(id=${solicitud.id})}">Editar</a>
                                             <form th:action="@{/vista/solicitudes/eliminar/{id}(id=${solicitud.id})}" method="post" class="m-0">

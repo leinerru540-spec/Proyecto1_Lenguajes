@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 import com.spring.app.service.UsuarioDetailsService;
 
@@ -40,34 +41,44 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        // Login y recursos publicos.
-                        .requestMatchers("/auth/**", "/", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-
-                        // Temporalmente dejamos libres las vistas y modulos para poder navegar
-                        // entre paginas mientras se corrige el flujo de autenticacion con JWT.
                         .requestMatchers(
-                                "/usuarios/**",
-                                "/roles/**",
-                                "/clientes/**",
-                                "/consultorias/**",
-                                "/solicitudes/**",
+                                "/auth/**",
+                                "/",
+                                "/login",
+                                "/registro",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/webjars/**")
+                        .permitAll()
+
+                        .requestMatchers(
+                                "/admin",
                                 "/vista/clientes/**",
                                 "/vista/consultorias/**",
-                                "/vista/solicitudes/**"
-                        ).permitAll()
+                                "/vista/usuarios/**",
+                                "/usuarios/**",
+                                "/roles/**",
+                                "/clientes/**")
+                        .hasRole("ADMINISTRADOR")
 
-                        // Reglas originales comentadas porque estaban bloqueando la navegacion:
-                        // .requestMatchers("/usuarios/**", "/roles/**", "/clientes/**", "/consultorias/**")
-                        // .hasRole("ADMINISTRADOR")
-                        // .requestMatchers("/solicitudes/**", "/vista/solicitudes/**")
-                        // .hasAnyRole("ADMINISTRADOR", "CLIENTE")
-                        // .requestMatchers("/vista/clientes/**", "/vista/consultorias/**")
-                        // .hasRole("ADMINISTRADOR")
-                        // .anyRequest().authenticated()
-                        .anyRequest().permitAll()
-                )
+                        .requestMatchers(
+                                "/user",
+                                "/vista/servicios/**",
+                                "/vista/solicitudes/**",
+                                "/solicitudes/**")
+                        .hasAnyRole("ADMINISTRADOR", "CLIENTE")
 
-                // Agrega nuestro filtro JWT antes del filtro normal de usuario/password de Spring.
+                        .requestMatchers(HttpMethod.GET, "/consultorias/**")
+                        .hasAnyRole("ADMINISTRADOR", "CLIENTE")
+
+                        .requestMatchers("/consultorias/**")
+                        .hasRole("ADMINISTRADOR")
+
+                        .anyRequest().authenticated())
+
+                // Agrega nuestro filtro JWT antes del filtro normal de usuario/password de
+                // Spring.
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -75,7 +86,8 @@ public class SecurityConfig {
 
     @Bean
     AuthenticationManager authenticationManager() {
-        // Este proveedor usa UsuarioDetailsService para buscar el usuario y BCrypt para validar la contrasena.
+        // Este proveedor usa UsuarioDetailsService para buscar el usuario y BCrypt para
+        // validar la contrasena.
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(usuarioDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder());
 

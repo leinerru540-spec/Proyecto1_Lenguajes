@@ -13,6 +13,7 @@ import com.spring.app.service.UsuarioDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -46,6 +47,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // Si el encabezado existe y empieza con "Bearer ", extraemos el token.
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
+        } else if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwtToken".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (token != null) {
             email = jwtUtil.extractUsername(token);
         }
 

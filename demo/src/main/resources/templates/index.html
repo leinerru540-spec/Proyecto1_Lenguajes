@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria Legal | Inicio</title>
+    <title>Consultoria Legal | Bienvenida</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
@@ -18,10 +18,10 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-                    <li class="nav-item"><a class="nav-link" href="/vista/clientes">Clientes</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/vista/consultorias">Consultorias</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/vista/solicitudes">Solicitudes</a></li>
-                    <li class="nav-item"><a class="btn btn-primary px-4" href="/roles">Roles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#acceso">Acceso</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-primary" href="/registro">Crear cuenta</a></li>
+                    <li class="nav-item"><a class="btn btn-primary px-4" href="/login">Iniciar sesion</a></li>
                 </ul>
             </div>
         </div>
@@ -31,45 +31,29 @@
         <div class="container py-4">
             <div class="row align-items-center g-4">
                 <div class="col-lg-7">
-                    <span class="badge text-bg-primary mb-3">Sistema de gestion</span>
-                    <h1 class="display-5 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Administra clientes, consultorias y solicitudes desde un solo lugar.</h1>
+                    <span class="badge text-bg-primary mb-3">Atencion legal y consultoria empresarial</span>
+                    <h1 class="display-5 fw-bold mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Bienvenido a Consultoria Legal.</h1>
                     <p class="lead text-secondary mb-4">
-                        Esta plataforma te permite organizar la informacion principal del proyecto,
-                        consultar modulos clave y mantener una base clara.
+                        Gestionamos solicitudes, seguimiento de consultorias y comunicacion con clientes
+                        desde una plataforma centralizada para servicios legales y administrativos.
                     </p>
                     <div class="d-flex flex-column flex-sm-row gap-3">
-                        <a href="/vista/consultorias" class="btn btn-primary btn-lg">Ver consultorias</a>
-                        <a href="/vista/clientes" class="btn btn-outline-secondary btn-lg">Explorar clientes</a>
+                        <a href="/login" class="btn btn-primary btn-lg">Iniciar sesion</a>
+                        <a href="/registro" class="btn btn-outline-secondary btn-lg">Crear cuenta de cliente</a>
                     </div>
                 </div>
                 <div class="col-lg-5">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body p-4">
-                            <h2 class="h4 mb-3" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Resumen rapido</h2>
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <div class="bg-light rounded p-3 h-100">
-                                        <div class="fw-bold fs-4" style="font-family: 'Poppins', sans-serif; color: #2563eb;">Clientes</div>
-                                        <small class="text-secondary">Informacion comercial</small>
-                                    </div>
+                            <h2 class="h4 mb-3" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Acceso al sistema</h2>
+                            <div class="d-grid gap-3">
+                                <div class="bg-light rounded p-3">
+                                    <div class="fw-bold" style="font-family: 'Poppins', sans-serif; color: #1e3a8a;">Administrador</div>
+                                    <small class="text-secondary">Gestiona clientes, consultorias, solicitudes, usuarios y roles.</small>
                                 </div>
-                                <div class="col-6">
-                                    <div class="bg-light rounded p-3 h-100">
-                                        <div class="fw-bold fs-4" style="font-family: 'Poppins', sans-serif; color: #2563eb;">Consultorias</div>
-                                        <small class="text-secondary">Seguimiento de servicios</small>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="bg-light rounded p-3 h-100">
-                                        <div class="fw-bold fs-4" style="font-family: 'Poppins', sans-serif; color: #2563eb;">Solicitudes</div>
-                                        <small class="text-secondary">Control del proceso</small>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="bg-light rounded p-3 h-100">
-                                        <div class="fw-bold fs-4" style="font-family: 'Poppins', sans-serif; color: #2563eb;">Roles</div>
-                                        <small class="text-secondary">Organizacion de permisos</small>
-                                    </div>
+                                <div class="bg-light rounded p-3">
+                                    <div class="fw-bold" style="font-family: 'Poppins', sans-serif; color: #1e3a8a;">Cliente</div>
+                                    <small class="text-secondary">Registra y consulta solicitudes asociadas al servicio.</small>
                                 </div>
                             </div>
                         </div>
@@ -79,70 +63,75 @@
         </div>
     </header>
 
-    <main class="py-5">
-        <div class="container">
-            <section class="mb-5">
+    <main>
+        <section id="servicios" class="py-5">
+            <div class="container">
+                <div class="mb-4">
+                    <span class="badge text-bg-light border mb-3">Servicios</span>
+                    <h2 class="h3" style="font-family: 'Poppins', sans-serif; color: #1e3a8a;">Soluciones disponibles</h2>
+                </div>
                 <div class="row g-4">
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
+                        <article class="card h-100 border-0 shadow-sm">
                             <div class="card-body p-4">
-                                <h3 class="h5" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Gestion de clientes</h3>
-                                <p class="text-secondary">
-                                    Visualiza empresas, contactos y datos principales para dar seguimiento a cada cliente.
+                                <h3 class="h5" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Consultoria legal</h3>
+                                <p class="text-secondary mb-0">
+                                    Acompanamiento en procesos legales, revision de casos y seguimiento del estado de cada servicio.
                                 </p>
-                                <a href="/vista/clientes" class="btn btn-outline-primary">Ir a clientes</a>
                             </div>
-                        </div>
+                        </article>
                     </div>
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
+                        <article class="card h-100 border-0 shadow-sm">
                             <div class="card-body p-4">
-                                <h3 class="h5" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Control de consultorias</h3>
-                                <p class="text-secondary">
-                                    Consulta el tipo de servicio, estado actual y cliente relacionado en cada consultoria.
+                                <h3 class="h5" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Gestion de solicitudes</h3>
+                                <p class="text-secondary mb-0">
+                                    Registro de nuevas solicitudes, control de fechas, responsables y estado del tramite.
                                 </p>
-                                <a href="/vista/consultorias" class="btn btn-outline-primary">Ir a consultorias</a>
                             </div>
-                        </div>
+                        </article>
                     </div>
                     <div class="col-md-4">
-                        <div class="card h-100 border-0 shadow-sm">
+                        <article class="card h-100 border-0 shadow-sm">
                             <div class="card-body p-4">
-                                <h3 class="h5" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Seguimiento de solicitudes</h3>
-                                <p class="text-secondary">
-                                    Revisa solicitudes, fechas y responsables para mantener el flujo del sistema ordenado.
+                                <h3 class="h5" style="font-family: 'Poppins', sans-serif; color: #0f172a;">Administracion de clientes</h3>
+                                <p class="text-secondary mb-0">
+                                    Organizacion de informacion de clientes para dar continuidad a los servicios contratados.
                                 </p>
-                                <a href="/vista/solicitudes" class="btn btn-outline-primary">Ir a solicitudes</a>
                             </div>
-                        </div>
+                        </article>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="bg-white rounded-4 shadow-sm p-4 p-lg-5">
-                <div class="row g-4 align-items-center">
+        <section id="acceso" class="py-5 bg-white border-top">
+            <div class="container">
+                <div class="row align-items-center g-4">
                     <div class="col-lg-8">
-                        <h2 class="h3 mb-3" style="font-family: 'Poppins', sans-serif; color: #1e3a8a;">Que ofrece esta pagina principal</h2>
+                        <h2 class="h3 mb-3" style="font-family: 'Poppins', sans-serif; color: #1e3a8a;">Ingresa con tu cuenta o crea una nueva.</h2>
                         <p class="text-secondary mb-0">
-                            Un buen sistema, orienta al usuario, muestra accesos rapidos
-                            y deja claro.
+                            El inicio de sesion detecta si la cuenta corresponde a administrador o cliente
+                            y redirige al panel correcto.
                         </p>
                     </div>
-                    <div class="col-lg-4 text-lg-end">
-                        <a href="/vista/consultorias" class="btn btn-primary btn-lg">Comenzar</a>
+                    <div class="col-lg-4">
+                        <div class="d-grid gap-2">
+                            <a href="/login" class="btn btn-primary btn-lg">Iniciar sesion</a>
+                            <a href="/registro" class="btn btn-outline-primary btn-lg">Crear usuario cliente</a>
+                        </div>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 
     <footer class="py-4 border-top bg-white">
         <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-            <p class="mb-0 text-secondary">Consultoria Legal - By Equipo de Desarrollo</p>
+            <p class="mb-0 text-secondary">Consultoria Legal - Equipo de Desarrollo</p>
             <div class="d-flex gap-3">
-                <a class="text-decoration-none text-secondary" href="/vista/clientes">Clientes</a>
-                <a class="text-decoration-none text-secondary" href="/vista/consultorias">Consultorias</a>
-                <a class="text-decoration-none text-secondary" href="/vista/solicitudes">Solicitudes</a>
+                <a class="text-decoration-none text-secondary" href="/login">Login</a>
+                <a class="text-decoration-none text-secondary" href="/registro">Registro</a>
             </div>
         </div>
     </footer>

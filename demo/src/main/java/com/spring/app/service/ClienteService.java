@@ -29,6 +29,10 @@ public class ClienteService {
         return clienteRepository.findById(id); // Implementar lógica para obtener un cliente por ID
     }
 
+    public Optional<Cliente> findByCorreo(String correo) {
+        return clienteRepository.findByCorreo(correo);
+    }
+
     public void deleteById(Long id) {
         clienteRepository.deleteById(id); // Implementar lógica para eliminar un cliente por ID
     }

@@ -2,6 +2,8 @@ package com.spring.app.controller;
 
 import com.spring.app.entity.Rol;
 import com.spring.app.repository.RolRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,24 +24,35 @@ public class RolController {
     }
 
     @GetMapping("/{id}")
-    public Rol obtener(@PathVariable Long id) {
-        return rolRepository.findById(id).orElse(null);
+    public ResponseEntity<Rol> obtener(@PathVariable Long id) {
+        return rolRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Rol crear(@RequestBody Rol rol) {
-        return rolRepository.save(rol);
+    public ResponseEntity<Rol> crear(@RequestBody Rol rol) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(rolRepository.save(rol));
     }
 
     @PutMapping("/{id}")
-    public Rol actualizar(@PathVariable Long id, @RequestBody Rol rol) {
+    public ResponseEntity<Rol> actualizar(@PathVariable Long id, @RequestBody Rol rol) {
+        if (!rolRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         rol.setId(id);
-        return rolRepository.save(rol);
+        return ResponseEntity.ok(rolRepository.save(rol));
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!rolRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         rolRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
 

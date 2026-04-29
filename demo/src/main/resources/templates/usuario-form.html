@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Cliente | Consultoria Legal</title>
+    <title>Nuevo Usuario | Consultoria Legal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
         <div class="container">
             <a class="navbar-brand fw-bold" style="font-family: 'Poppins', sans-serif; color: #2563eb;" href="/">Consultoria Legal</a>
             <div class="d-flex gap-2">
-                <a class="btn btn-outline-primary" href="/vista/clientes">Volver a clientes</a>
+                <a class="btn btn-outline-primary" href="/vista/usuarios">Volver a usuarios</a>
                 <a class="btn btn-outline-danger" href="/auth/logout">Cerrar sesion</a>
             </div>
         </div>
@@ -26,30 +26,33 @@
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body p-4 p-lg-5">
-                            <span class="badge text-bg-primary mb-3">Modulo de clientes</span>
-                            <h1 class="h2 mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;" th:text="${formTitle}">Nuevo cliente</h1>
-                            <p class="text-secondary mb-4">Completa los datos del cliente y guarda los cambios en el sistema.</p>
+                            <span class="badge text-bg-primary mb-3">Modulo de usuarios</span>
+                            <h1 class="h2 mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;">Crear usuario</h1>
+                            <p class="text-secondary mb-4">Registra una cuenta para administrador o cliente.</p>
 
-                            <form th:action="${formAction}" th:object="${clienteForm}" method="post" class="row g-3">
+                            <form th:action="@{/vista/usuarios/nuevo}" th:object="${usuarioForm}" method="post" class="row g-3">
                                 <div class="col-md-6">
                                     <label for="nombre" class="form-label fw-semibold">Nombre</label>
                                     <input id="nombre" th:field="*{nombre}" class="form-control" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="empresa" class="form-label fw-semibold">Empresa</label>
-                                    <input id="empresa" th:field="*{empresa}" class="form-control">
+                                    <label for="email" class="form-label fw-semibold">Correo electronico</label>
+                                    <input id="email" th:field="*{email}" type="email" class="form-control" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="telefono" class="form-label fw-semibold">Telefono</label>
-                                    <input id="telefono" th:field="*{telefono}" class="form-control" required>
+                                    <label for="password" class="form-label fw-semibold">Contrasena</label>
+                                    <input id="password" th:field="*{password}" type="password" class="form-control" minlength="6" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="correo" class="form-label fw-semibold">Correo</label>
-                                    <input id="correo" th:field="*{correo}" type="email" class="form-control" required>
+                                    <label for="rolId" class="form-label fw-semibold">Rol</label>
+                                    <select id="rolId" th:field="*{rolId}" class="form-select" required>
+                                        <option value="">Selecciona un rol</option>
+                                        <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
+                                    </select>
                                 </div>
                                 <div class="col-12 d-flex gap-2 pt-2">
-                                    <button type="submit" class="btn btn-primary">Guardar cliente</button>
-                                    <a href="/vista/clientes" class="btn btn-outline-secondary">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary">Guardar usuario</button>
+                                    <a href="/vista/usuarios" class="btn btn-outline-secondary">Cancelar</a>
                                 </div>
                             </form>
                         </div>

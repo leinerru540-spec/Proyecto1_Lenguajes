@@ -1,11 +1,30 @@
 package com.spring.app.dto;
 
 public class SolicitudForm {
+    private String nombreSolicitante;
+    private String correoSolicitante;
     private String descripcion;
     private String estado;
     private String fecha;
+    private Long clienteId;
     private Long consultoriaId;
     private Long usuarioId;
+
+    public String getNombreSolicitante() {
+        return nombreSolicitante;
+    }
+
+    public void setNombreSolicitante(String nombreSolicitante) {
+        this.nombreSolicitante = nombreSolicitante;
+    }
+
+    public String getCorreoSolicitante() {
+        return correoSolicitante;
+    }
+
+    public void setCorreoSolicitante(String correoSolicitante) {
+        this.correoSolicitante = correoSolicitante;
+    }
 
     public String getDescripcion() {
         return descripcion;
@@ -29,6 +48,14 @@ public class SolicitudForm {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 
     public Long getConsultoriaId() {

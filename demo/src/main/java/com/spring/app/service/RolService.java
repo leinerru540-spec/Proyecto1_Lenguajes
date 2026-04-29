@@ -1,5 +1,6 @@
 package com.spring.app.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class RolService {
 
     public Optional<Rol> findByNombre(NombreRol nombre) {
         return rolRepository.findByNombre(nombre);
+    }
+
+    public List<Rol> findAll() {
+        return rolRepository.findAll();
     }
 
     public Rol save(Rol rol) {

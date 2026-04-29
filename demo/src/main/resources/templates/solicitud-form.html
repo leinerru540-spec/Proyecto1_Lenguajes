@@ -15,6 +15,7 @@
             <a class="navbar-brand fw-bold" style="font-family: 'Poppins', sans-serif; color: #2563eb;" href="/">Consultoria Legal</a>
             <div class="d-flex gap-2">
                 <a class="btn btn-outline-primary" href="/vista/solicitudes">Volver a solicitudes</a>
+                <a class="btn btn-outline-danger" href="/auth/logout">Cerrar sesion</a>
             </div>
         </div>
     </nav>
@@ -27,40 +28,57 @@
                         <div class="card-body p-4 p-lg-5">
                             <span class="badge text-bg-primary mb-3">Modulo de solicitudes</span>
                             <h1 class="h2 mb-3" style="font-family: 'Poppins', sans-serif; color: #1d4ed8;" th:text="${formTitle}">Nueva solicitud</h1>
-                            <p class="text-secondary mb-4">Relaciona la solicitud con una consultoria y un usuario responsable.</p>
+                            <p class="text-secondary mb-4">Registra los datos del solicitante y la consultoria que desea.</p>
 
                             <form th:action="${formAction}" th:object="${solicitudForm}" method="post" class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-12" th:if="${isAdmin}">
+                                    <label for="clienteId" class="form-label fw-semibold">Cliente</label>
+                                    <select id="clienteId" th:field="*{clienteId}" class="form-select" required>
+                                        <option value="">Selecciona un cliente</option>
+                                        <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nombre + ' - ' + cliente.correo}"></option>
+                                    </select>
+                                </div>
+                                <input th:unless="${isAdmin}" th:field="*{clienteId}" type="hidden">
+
+                                <div class="col-md-6" th:unless="${isAdmin}">
+                                    <label for="nombreSolicitante" class="form-label fw-semibold">Nombre del solicitante</label>
+                                    <input id="nombreSolicitante" th:field="*{nombreSolicitante}" class="form-control" required>
+                                </div>
+                                <div class="col-md-6" th:unless="${isAdmin}">
+                                    <label for="correoSolicitante" class="form-label fw-semibold">Correo electronico</label>
+                                    <input id="correoSolicitante" th:field="*{correoSolicitante}" type="email" class="form-control" required>
+                                </div>
+                                <input th:if="${isAdmin}" th:field="*{nombreSolicitante}" type="hidden">
+                                <input th:if="${isAdmin}" th:field="*{correoSolicitante}" type="hidden">
+                                <div class="col-md-6" th:if="${isAdmin}">
                                     <label for="estado" class="form-label fw-semibold">Estado</label>
                                     <select id="estado" th:field="*{estado}" class="form-select" required>
                                         <option value="">Selecciona un estado</option>
                                         <option th:each="estado : ${estadosSolicitud}" th:value="${estado.name()}" th:text="${estado.name()}"></option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
+                                <input th:unless="${isAdmin}" th:field="*{estado}" type="hidden">
+
+                                <div class="col-md-6" th:if="${isAdmin}">
                                     <label for="fecha" class="form-label fw-semibold">Fecha</label>
                                     <input id="fecha" th:field="*{fecha}" type="date" class="form-control" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="consultoriaId" class="form-label fw-semibold">Consultoria</label>
+                                <input th:unless="${isAdmin}" th:field="*{fecha}" type="hidden">
+                                <input th:field="*{usuarioId}" type="hidden">
+
+                                <div class="col-12">
+                                    <label for="consultoriaId" class="form-label fw-semibold">Consultoria que desea</label>
                                     <select id="consultoriaId" th:field="*{consultoriaId}" class="form-select" required>
                                         <option value="">Selecciona una consultoria</option>
-                                        <option th:each="consultoria : ${consultorias}" th:value="${consultoria.id}" th:text="${consultoria.tipo + ' - ' + consultoria.cliente.nombre}"></option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="usuarioId" class="form-label fw-semibold">Responsable</label>
-                                    <select id="usuarioId" th:field="*{usuarioId}" class="form-select" required>
-                                        <option value="">Selecciona un usuario</option>
-                                        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre + ' - ' + usuario.email}"></option>
+                                        <option th:each="consultoria : ${consultorias}" th:value="${consultoria.id}" th:text="${consultoria.tipo}"></option>
                                     </select>
                                 </div>
                                 <div class="col-12">
-                                    <label for="descripcion" class="form-label fw-semibold">Descripcion</label>
+                                    <label for="descripcion" class="form-label fw-semibold">Descripcion de la solicitud</label>
                                     <textarea id="descripcion" th:field="*{descripcion}" class="form-control" rows="4" required></textarea>
                                 </div>
                                 <div class="col-12 d-flex gap-2 pt-2">
-                                    <button type="submit" class="btn btn-primary">Guardar solicitud</button>
+                                    <button type="submit" class="btn btn-primary" th:text="${isAdmin and isEdit ? 'Actualizar solicitud' : 'Enviar solicitud'}">Guardar solicitud</button>
                                     <a href="/vista/solicitudes" class="btn btn-outline-secondary">Cancelar</a>
                                 </div>
                             </form>

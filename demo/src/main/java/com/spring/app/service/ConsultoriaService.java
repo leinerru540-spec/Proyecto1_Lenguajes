@@ -39,9 +39,7 @@ public class ConsultoriaService {
                 .orElseThrow(() -> new RuntimeException("Consultoría no encontrada con id: " + id));
 
         consultoriaExistente.setTipo(consultoriaActualizada.getTipo());
-        consultoriaExistente.setEstado(consultoriaActualizada.getEstado());
         consultoriaExistente.setDescripcion(consultoriaActualizada.getDescripcion());
-        consultoriaExistente.setCliente(consultoriaActualizada.getCliente());
 
         return consultoriaRepository.save(consultoriaExistente);
     }

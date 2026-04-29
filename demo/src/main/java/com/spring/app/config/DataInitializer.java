@@ -51,26 +51,38 @@ public class DataInitializer implements CommandLineRunner {
 
         // Crea un usuario administrador de prueba si aun no existe.
         usuarioRepository.findByEmail("admin@demo.com")
-                .orElseGet(() -> {
+                .ifPresentOrElse(usuario -> {
+                    usuario.setRol(administrador);
+                    if (!passwordEncoder.matches("admin123", usuario.getPassword())) {
+                        usuario.setPassword(passwordEncoder.encode("admin123"));
+                    }
+                    usuarioRepository.save(usuario);
+                }, () -> {
                     Usuario usuario = new Usuario();
                     usuario.setNombre("Administrador");
                     usuario.setEmail("admin@demo.com");
                     // La contrasena se guarda cifrada, no en texto plano.
                     usuario.setPassword(passwordEncoder.encode("admin123"));
                     usuario.setRol(administrador);
-                    return usuarioRepository.save(usuario);
+                    usuarioRepository.save(usuario);
                 });
 
         // Crea un usuario cliente de prueba si aun no existe.
         usuarioRepository.findByEmail("cliente@demo.com")
-                .orElseGet(() -> {
+                .ifPresentOrElse(usuario -> {
+                    usuario.setRol(cliente);
+                    if (!passwordEncoder.matches("cliente123", usuario.getPassword())) {
+                        usuario.setPassword(passwordEncoder.encode("cliente123"));
+                    }
+                    usuarioRepository.save(usuario);
+                }, () -> {
                     Usuario usuario = new Usuario();
                     usuario.setNombre("Cliente");
                     usuario.setEmail("cliente@demo.com");
                     // La contrasena se guarda cifrada, no en texto plano.
                     usuario.setPassword(passwordEncoder.encode("cliente123"));
                     usuario.setRol(cliente);
-                    return usuarioRepository.save(usuario);
+                    usuarioRepository.save(usuario);
                 });
     }
 }

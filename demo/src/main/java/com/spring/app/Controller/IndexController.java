@@ -14,4 +14,19 @@ public class IndexController {
     public String login() {
         return "login";
     }
+
+    @GetMapping("/registro")
+    public String registro() {
+        return "registro";
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
+
+    @GetMapping("/user")
+    public String user() {
+        return "user";
+    }
 }

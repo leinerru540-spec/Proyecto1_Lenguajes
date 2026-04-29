@@ -24,8 +24,14 @@ public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String descripcion;
+
+    @Column(nullable = false)
+    private String nombreSolicitante;
+
+    @Column(nullable = false)
+    private String correoSolicitante;
 
     @Enumerated(EnumType.STRING)
     private EstadoSolicitud estado; 
@@ -33,8 +39,12 @@ public class Solicitud {
     private LocalDate fecha;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "consultoria_id", nullable = false)

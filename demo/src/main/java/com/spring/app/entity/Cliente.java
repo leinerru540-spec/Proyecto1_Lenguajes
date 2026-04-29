@@ -33,6 +33,6 @@ public class Cliente {
     private String correo;
 
     @OneToMany(mappedBy = "cliente")
-    private List<Consultoria> consultorias;
+    private List<Solicitud> solicitudes;
 }
 
