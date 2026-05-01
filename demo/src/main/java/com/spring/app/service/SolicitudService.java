@@ -1,6 +1,7 @@
 package com.spring.app.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -34,6 +35,31 @@ public class SolicitudService {
 
     public void deleteById(Long id) {
         solicitudRepository.deleteById(id);
+    }
+
+    public void detachUsuarioAndCliente(Long usuarioId, String correoCliente) {
+        solicitudRepository.findAll().stream()
+                .filter(solicitud -> referencesUsuarioOrCliente(solicitud, usuarioId, correoCliente))
+                .forEach(solicitud -> {
+                    if (solicitud.getUsuario() != null && Objects.equals(solicitud.getUsuario().getId(), usuarioId)) {
+                        solicitud.setUsuario(null);
+                    }
+
+                    if (solicitud.getCliente() != null && Objects.equals(solicitud.getCliente().getCorreo(), correoCliente)) {
+                        solicitud.setCliente(null);
+                    }
+
+                    solicitudRepository.save(solicitud);
+                });
+    }
+
+    private boolean referencesUsuarioOrCliente(Solicitud solicitud, Long usuarioId, String correoCliente) {
+        boolean sameUsuario = solicitud.getUsuario() != null
+                && Objects.equals(solicitud.getUsuario().getId(), usuarioId);
+        boolean sameCliente = solicitud.getCliente() != null
+                && Objects.equals(solicitud.getCliente().getCorreo(), correoCliente);
+
+        return sameUsuario || sameCliente;
     }
 
     public Solicitud update(Long id, Solicitud solicitudActualizada) {

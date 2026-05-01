@@ -88,7 +88,8 @@
                                     <td class="text-end">
                                         <div class="d-inline-flex gap-2">
                                             <a class="btn btn-sm btn-outline-primary" th:href="@{/vista/consultorias/editar/{id}(id=${consultoria.id})}">Editar</a>
-                                            <form th:action="@{/vista/consultorias/eliminar/{id}(id=${consultoria.id})}" method="post" class="m-0">
+                                            <form th:action="@{/vista/consultorias/eliminar/{id}(id=${consultoria.id})}" method="post" class="m-0"
+                                                onsubmit="return confirm('Seguro que deseas eliminar esta consultoria?');">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
                                             </form>
                                         </div>

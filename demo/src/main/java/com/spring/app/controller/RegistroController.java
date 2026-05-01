@@ -10,6 +10,7 @@ import com.spring.app.dto.UsuarioForm;
 import com.spring.app.entity.NombreRol;
 import com.spring.app.entity.Rol;
 import com.spring.app.entity.Usuario;
+import com.spring.app.service.ClienteService;
 import com.spring.app.service.RolService;
 import com.spring.app.service.UsuarioService;
 
@@ -18,14 +19,17 @@ public class RegistroController {
 
     private final UsuarioService usuarioService;
     private final RolService rolService;
+    private final ClienteService clienteService;
     private final PasswordEncoder passwordEncoder;
 
     public RegistroController(
             UsuarioService usuarioService,
             RolService rolService,
+            ClienteService clienteService,
             PasswordEncoder passwordEncoder) {
         this.usuarioService = usuarioService;
         this.rolService = rolService;
+        this.clienteService = clienteService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -40,7 +44,8 @@ public class RegistroController {
         usuario.setPassword(passwordEncoder.encode(usuarioForm.getPassword()));
         usuario.setRol(rolCliente);
 
-        usuarioService.save(usuario);
+        Usuario saved = usuarioService.save(usuario);
+        clienteService.ensureClienteForUsuario(saved);
         redirectAttributes.addFlashAttribute("successMessage", "Cuenta creada correctamente. Ya puedes iniciar sesion como cliente.");
         return "redirect:/login";
     }

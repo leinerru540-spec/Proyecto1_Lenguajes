@@ -126,7 +126,8 @@
                                             <a class="btn btn-sm btn-outline-primary"
                                                 th:href="@{/vista/solicitudes/editar/{id}(id=${solicitud.id})}">Editar</a>
                                             <form th:action="@{/vista/solicitudes/eliminar/{id}(id=${solicitud.id})}"
-                                                method="post" class="m-0">
+                                                method="post" class="m-0"
+                                                onsubmit="return confirm('Seguro que deseas eliminar esta solicitud?');">
                                                 <button type="submit"
                                                     class="btn btn-sm btn-outline-danger">Eliminar</button>
                                             </form>

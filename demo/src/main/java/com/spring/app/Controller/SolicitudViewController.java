@@ -160,6 +160,7 @@ public class SolicitudViewController {
     }
 
     private void cargarDatosFormulario(Model model) {
+        clienteService.ensureClientesForUsuarios(usuarioService.findAll());
         model.addAttribute("clientes", clienteService.findAll());
         model.addAttribute("consultorias", consultoriaService.findAll());
         model.addAttribute("estadosSolicitud", EstadoSolicitud.values());

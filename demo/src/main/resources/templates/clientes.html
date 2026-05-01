@@ -93,7 +93,8 @@
                                     <td class="text-end">
                                         <div class="d-inline-flex gap-2">
                                             <a class="btn btn-sm btn-outline-primary" th:href="@{/vista/clientes/editar/{id}(id=${cliente.id})}">Editar</a>
-                                            <form th:action="@{/vista/clientes/eliminar/{id}(id=${cliente.id})}" method="post" class="m-0">
+                                            <form th:action="@{/vista/clientes/eliminar/{id}(id=${cliente.id})}" method="post" class="m-0"
+                                                onsubmit="return confirm('Seguro que deseas eliminar este cliente?');">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
                                             </form>
                                         </div>
