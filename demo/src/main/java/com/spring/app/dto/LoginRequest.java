@@ -2,11 +2,12 @@ package com.spring.app.dto;
 
 public class LoginRequest {
 
-    // Email usado como identificador del usuario al iniciar sesion.
     private String email;
-
-    // Contrasena enviada por el usuario. Se compara contra la contrasena cifrada en BD.
+    private String username;
     private String password;
+
+    public LoginRequest() {
+    }
 
     public String getEmail() {
         return email;
@@ -14,6 +15,15 @@ public class LoginRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username != null ? username : email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        this.email = username;
     }
 
     public String getPassword() {
@@ -24,4 +34,3 @@ public class LoginRequest {
         this.password = password;
     }
 }
-

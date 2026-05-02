@@ -2,44 +2,36 @@ package com.spring.app.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.http.HttpMethod;
-
-import com.spring.app.service.UsuarioDetailsService;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    // Servicio que carga los usuarios reales desde la base de datos.
-    private final UsuarioDetailsService usuarioDetailsService;
-
-    // Filtro que valida el token JWT en cada solicitud.
     private final JwtRequestFilter jwtRequestFilter;
 
-    public SecurityConfig(
-            UsuarioDetailsService usuarioDetailsService,
-            JwtRequestFilter jwtRequestFilter) {
-        this.usuarioDetailsService = usuarioDetailsService;
+    public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                // Se desactiva CSRF porque JWT se usa principalmente en APIs REST sin sesiones.
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
                 .csrf(csrf -> csrf.disable())
-
-                // Con JWT el servidor no guarda sesion. Cada request debe traer su token.
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/**",
@@ -47,13 +39,11 @@ public class SecurityConfig {
                                 "/login",
                                 "/registro",
                                 "/Style.css",
-                                "/Style.css",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
                                 "/webjars/**")
                         .permitAll()
-
                         .requestMatchers(
                                 "/admin",
                                 "/vista/clientes/**",
@@ -63,42 +53,29 @@ public class SecurityConfig {
                                 "/roles/**",
                                 "/clientes/**")
                         .hasRole("ADMINISTRADOR")
-
                         .requestMatchers(
                                 "/user",
                                 "/vista/servicios/**",
                                 "/vista/solicitudes/**",
                                 "/solicitudes/**")
                         .hasAnyRole("ADMINISTRADOR", "CLIENTE")
-
                         .requestMatchers(HttpMethod.GET, "/consultorias/**")
                         .hasAnyRole("ADMINISTRADOR", "CLIENTE")
-
                         .requestMatchers("/consultorias/**")
                         .hasRole("ADMINISTRADOR")
-
-                        .anyRequest().authenticated())
-
-                // Agrega nuestro filtro JWT antes del filtro normal de usuario/password de
-                // Spring.
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
-    AuthenticationManager authenticationManager() {
-        // Este proveedor usa UsuarioDetailsService para buscar el usuario y BCrypt para
-        // validar la contrasena.
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(usuarioDetailsService);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-
-        return new ProviderManager(authenticationProvider);
-    }
-
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        // BCrypt guarda contrasenas cifradas, nunca en texto plano.
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 }

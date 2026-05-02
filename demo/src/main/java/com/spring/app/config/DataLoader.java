@@ -11,7 +11,7 @@ import com.spring.app.repository.RolRepository;
 import com.spring.app.repository.UsuarioRepository;
 
 @Component
-public class DataInitializer implements CommandLineRunner {
+public class DataLoader implements CommandLineRunner {
 
     // Repositorios usados para consultar y guardar roles/usuarios al iniciar la aplicacion.
     private final RolRepository rolRepository;
@@ -20,7 +20,7 @@ public class DataInitializer implements CommandLineRunner {
     // Codificador usado para guardar contrasenas cifradas con BCrypt.
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(
+    public DataLoader(
             RolRepository rolRepository,
             UsuarioRepository usuarioRepository,
             PasswordEncoder passwordEncoder) {

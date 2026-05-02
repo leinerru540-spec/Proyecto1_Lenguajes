@@ -1,4 +1,4 @@
-package com.spring.app.Controller;
+package com.spring.app.controller;
 
 import com.spring.app.dto.UsuarioForm;
 import com.spring.app.dto.UsuarioDTO;

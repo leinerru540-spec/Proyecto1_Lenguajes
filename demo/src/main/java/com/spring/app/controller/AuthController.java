@@ -1,105 +1,78 @@
-package com.spring.app.Controller;
+package com.spring.app.controller;
 
-import java.util.Map;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.app.dto.AuthResponse;
 import com.spring.app.dto.LoginRequest;
 import com.spring.app.security.JwtUtil;
-import com.spring.app.service.UsuarioDetailsService;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    // AuthenticationManager ejecuta el proceso de autenticacion de Spring Security.
-    // Usa UsuarioDetailsService para buscar el usuario y PasswordEncoder para comparar la contrasena.
     private final AuthenticationManager authenticationManager;
-
-    // Servicio propio del proyecto que carga usuarios desde la tabla usuarios usando el email.
-    private final UsuarioDetailsService usuarioDetailsService;
-
-    // Clase utilitaria encargada de generar y validar tokens JWT.
+    private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
-    public AuthController(
-            AuthenticationManager authenticationManager,
-            UsuarioDetailsService usuarioDetailsService,
-            JwtUtil jwtUtil) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          UserDetailsService userDetailsService,
+                          JwtUtil jwtUtil) {
         this.authenticationManager = authenticationManager;
-        this.usuarioDetailsService = usuarioDetailsService;
+        this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest request, HttpServletResponse response) {
-        // Endpoint de login:
-        // Recibe un JSON con email y password, por ejemplo:
-        // { "email": "admin@demo.com", "password": "admin123" }
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
 
-        // Este objeto representa las credenciales enviadas por el usuario.
-        // Spring Security lo usa para intentar autenticar la solicitud.
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
+            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+            String token = jwtUtil.generateToken(userDetails);
+            String rol = userDetails.getAuthorities().stream()
+                    .findFirst()
+                    .map(authority -> authority.getAuthority().replaceFirst("^ROLE_", ""))
+                    .orElse("");
 
-        // Si las credenciales son incorrectas, Spring lanza una excepcion y no se genera token.
-        // Si llegan hasta aqui, significa que el email y la contrasena son validos.
+            ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", token)
+                    .httpOnly(true)
+                    .path("/")
+                    .maxAge(jwtExpiration / 1000)
+                    .sameSite("Lax")
+                    .build();
 
-        // Se vuelve a cargar el usuario para obtener sus datos y roles como UserDetails.
-        UserDetails userDetails = usuarioDetailsService.loadUserByUsername(request.getEmail());
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    .body(new AuthResponse(token, rol));
 
-        // Con los datos del usuario autenticado se genera el token JWT.
-        // El token llevara el email como subject y una fecha de expiracion.
-        String token = jwtUtil.generateToken(userDetails);
-        String rol = userDetails.getAuthorities().stream()
-                .findFirst()
-                .map(authority -> authority.getAuthority().replace("ROLE_", ""))
-                .orElse("");
-
-        ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", token)
-                .httpOnly(true)
-                .path("/")
-                .maxAge(jwtExpiration / 1000)
-                .sameSite("Lax")
-                .build();
-
-        response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
-
-        // El cliente debe enviar este token en las siguientes solicitudes:
-        // Authorization: Bearer <token>
-        return new AuthResponse(token, rol);
-    }
-
-    @GetMapping("/me")
-    public Map<String, Object> me(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return Map.of("authenticated", false);
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Credenciales invalidas");
         }
-
-        return Map.of(
-                "authenticated", true,
-                "email", authentication.getName(),
-                "roles", authentication.getAuthorities().stream()
-                        .map(Object::toString)
-                        .toList()
-        );
     }
 
     @GetMapping("/logout")
@@ -115,4 +88,3 @@ public class AuthController {
         response.sendRedirect("/");
     }
 }
-
