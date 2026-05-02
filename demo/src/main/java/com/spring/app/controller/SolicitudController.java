@@ -11,10 +11,12 @@ import com.spring.app.repository.ClienteRepository;
 import com.spring.app.repository.ConsultoriaRepository;
 import com.spring.app.repository.SolicitudRepository;
 import com.spring.app.repository.UsuarioRepository;
+import com.spring.app.service.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,16 +31,19 @@ public class SolicitudController {
     private final ConsultoriaRepository consultoriaRepository;
     private final ClienteRepository clienteRepository;
     private final UsuarioRepository usuarioRepository;
+    private final EmailService emailService;
 
     public SolicitudController(
             SolicitudRepository solicitudRepository,
             ConsultoriaRepository consultoriaRepository,
             ClienteRepository clienteRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository,
+            EmailService emailService) {
         this.solicitudRepository = solicitudRepository;
         this.consultoriaRepository = consultoriaRepository;
         this.clienteRepository = clienteRepository;
         this.usuarioRepository = usuarioRepository;
+        this.emailService = emailService;
     }
 
     @GetMapping
@@ -73,6 +78,7 @@ public class SolicitudController {
         }
 
         Solicitud saved = solicitudRepository.save(mapToEntity(solicitudForm));
+        notificarSolicitudCreada(saved);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapToDto(saved));
     }
 
@@ -84,9 +90,14 @@ public class SolicitudController {
             return ResponseEntity.notFound().build();
         }
 
+        EstadoSolicitud estadoAnterior = solicitudRepository.findById(id)
+                .map(Solicitud::getEstado)
+                .orElse(null);
+
         Solicitud solicitud = mapToEntity(solicitudForm);
         solicitud.setId(id);
         Solicitud updated = solicitudRepository.save(solicitud);
+        notificarCambioEstado(updated, estadoAnterior);
         return ResponseEntity.ok(mapToDto(updated));
     }
 
@@ -116,8 +127,12 @@ public class SolicitudController {
             Cliente cliente = clienteRepository.findById(solicitudForm.getClienteId())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + solicitudForm.getClienteId()));
             solicitud.setCliente(cliente);
-            solicitud.setNombreSolicitante(cliente.getNombre());
-            solicitud.setCorreoSolicitante(cliente.getCorreo());
+            solicitud.setNombreSolicitante(StringUtils.hasText(solicitudForm.getNombreSolicitante())
+                    ? solicitudForm.getNombreSolicitante()
+                    : cliente.getNombre());
+            solicitud.setCorreoSolicitante(StringUtils.hasText(solicitudForm.getCorreoSolicitante())
+                    ? solicitudForm.getCorreoSolicitante()
+                    : cliente.getCorreo());
         } else {
             solicitud.setNombreSolicitante(solicitudForm.getNombreSolicitante());
             solicitud.setCorreoSolicitante(solicitudForm.getCorreoSolicitante());
@@ -143,6 +158,32 @@ public class SolicitudController {
                 solicitud.getCliente() != null ? solicitud.getCliente().getId() : null,
                 solicitud.getConsultoria().getId(),
                 solicitud.getUsuario() != null ? solicitud.getUsuario().getId() : null
+        );
+    }
+
+    private void notificarSolicitudCreada(Solicitud solicitud) {
+        emailService.enviarCorreo(
+                solicitud.getCorreoSolicitante(),
+                "Solicitud recibida",
+                "Hola " + solicitud.getNombreSolicitante() + ",\n\n"
+                        + "Su solicitud fue recibida correctamente.\n"
+                        + "Estado actual: " + solicitud.getEstado().name() + ".\n\n"
+                        + "Gracias por contactarnos."
+        );
+    }
+
+    private void notificarCambioEstado(Solicitud solicitud, EstadoSolicitud estadoAnterior) {
+        if (estadoAnterior == null || estadoAnterior == solicitud.getEstado()) {
+            return;
+        }
+
+        emailService.enviarCorreo(
+                solicitud.getCorreoSolicitante(),
+                "Estado de solicitud actualizado",
+                "Hola " + solicitud.getNombreSolicitante() + ",\n\n"
+                        + "El estado de su solicitud cambio de "
+                        + estadoAnterior.name() + " a " + solicitud.getEstado().name() + ".\n\n"
+                        + "Gracias por contactarnos."
         );
     }
 

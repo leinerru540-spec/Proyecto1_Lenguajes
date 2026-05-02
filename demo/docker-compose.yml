@@ -27,6 +27,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/proyecto1
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
     ports:
       - "8080:8080"
 

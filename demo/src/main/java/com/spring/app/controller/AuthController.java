@@ -26,65 +26,63 @@ import com.spring.app.security.JwtUtil;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final JwtUtil jwtUtil;
+        private final AuthenticationManager authenticationManager;
+        private final UserDetailsService userDetailsService;
+        private final JwtUtil jwtUtil;
 
-    @Value("${jwt.expiration}")
-    private long jwtExpiration;
+        @Value("${jwt.expiration}")
+        private long jwtExpiration;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                          UserDetailsService userDetailsService,
-                          JwtUtil jwtUtil) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getUsername(),
-                            request.getPassword()
-                    )
-            );
-
-            UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-            String token = jwtUtil.generateToken(userDetails);
-            String rol = userDetails.getAuthorities().stream()
-                    .findFirst()
-                    .map(authority -> authority.getAuthority().replaceFirst("^ROLE_", ""))
-                    .orElse("");
-
-            ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", token)
-                    .httpOnly(true)
-                    .path("/")
-                    .maxAge(jwtExpiration / 1000)
-                    .sameSite("Lax")
-                    .build();
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                    .body(new AuthResponse(token, rol));
-
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Credenciales invalidas");
+        public AuthController(AuthenticationManager authenticationManager,
+                        UserDetailsService userDetailsService,
+                        JwtUtil jwtUtil) {
+                this.authenticationManager = authenticationManager;
+                this.userDetailsService = userDetailsService;
+                this.jwtUtil = jwtUtil;
         }
-    }
 
-    @GetMapping("/logout")
-    public void logout(HttpServletResponse response) throws java.io.IOException {
-        ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", "")
-                .httpOnly(true)
-                .path("/")
-                .maxAge(0)
-                .sameSite("Lax")
-                .build();
+        @PostMapping("/login")
+        public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+                try {
+                        authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(
+                                                        request.getUsername(),
+                                                        request.getPassword()));
 
-        response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
-        response.sendRedirect("/");
-    }
+                        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+                        String token = jwtUtil.generateToken(userDetails);
+                        String rol = userDetails.getAuthorities().stream()
+                                        .findFirst()
+                                        .map(authority -> authority.getAuthority().replaceFirst("^ROLE_", ""))
+                                        .orElse("");
+
+                        ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", token)
+                                        .httpOnly(true)
+                                        .path("/")
+                                        .maxAge(jwtExpiration / 1000)
+                                        .sameSite("Lax")
+                                        .build();
+
+                        return ResponseEntity.ok()
+                                        .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                                        .body(new AuthResponse(token, rol));
+
+                } catch (BadCredentialsException e) {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                        .body("Credenciales invalidas");
+                }
+        }
+
+        @GetMapping("/logout")
+        public void logout(HttpServletResponse response) throws java.io.IOException {
+                ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", "")
+                                .httpOnly(true)
+                                .path("/")
+                                .maxAge(0)
+                                .sameSite("Lax")
+                                .build();
+
+                response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
+                response.sendRedirect("/");
+        }
 }

@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,6 +25,7 @@ import com.spring.app.entity.Solicitud;
 import com.spring.app.entity.Usuario;
 import com.spring.app.service.ClienteService;
 import com.spring.app.service.ConsultoriaService;
+import com.spring.app.service.EmailService;
 import com.spring.app.service.SolicitudService;
 import com.spring.app.service.UsuarioService;
 
@@ -35,16 +37,19 @@ public class SolicitudViewController {
     private final ConsultoriaService consultoriaService;
     private final ClienteService clienteService;
     private final UsuarioService usuarioService;
+    private final EmailService emailService;
 
     public SolicitudViewController(
             SolicitudService solicitudService,
             ConsultoriaService consultoriaService,
             ClienteService clienteService,
-            UsuarioService usuarioService) {
+            UsuarioService usuarioService,
+            EmailService emailService) {
         this.solicitudService = solicitudService;
         this.consultoriaService = consultoriaService;
         this.clienteService = clienteService;
         this.usuarioService = usuarioService;
+        this.emailService = emailService;
     }
 
     @GetMapping
@@ -85,7 +90,8 @@ public class SolicitudViewController {
         solicitudForm.setFecha(LocalDate.now().toString());
         currentUsuario().ifPresent(usuario -> solicitudForm.setUsuarioId(usuario.getId()));
 
-        solicitudService.save(mapToEntity(solicitudForm));
+        Solicitud saved = solicitudService.save(mapToEntity(solicitudForm));
+        notificarSolicitudCreada(saved);
         redirectAttributes.addFlashAttribute("successMessage", "Solicitud creada correctamente.");
         return "redirect:/vista/solicitudes";
     }
@@ -145,7 +151,10 @@ public class SolicitudViewController {
         solicitudForm.setClienteId(clienteId);
         solicitudForm.setUsuarioId(solicitudExistente.getUsuario() != null ? solicitudExistente.getUsuario().getId() : null);
 
-        solicitudService.update(id, mapToEntity(solicitudForm));
+        EstadoSolicitud estadoAnterior = solicitudExistente.getEstado();
+
+        Solicitud updated = solicitudService.update(id, mapToEntity(solicitudForm));
+        notificarCambioEstado(updated, estadoAnterior);
         redirectAttributes.addFlashAttribute("successMessage", "Solicitud actualizada correctamente.");
         return "redirect:/vista/solicitudes";
     }
@@ -181,8 +190,12 @@ public class SolicitudViewController {
             Cliente cliente = clienteService.findById(solicitudForm.getClienteId())
                     .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + solicitudForm.getClienteId()));
             solicitud.setCliente(cliente);
-            solicitud.setNombreSolicitante(cliente.getNombre());
-            solicitud.setCorreoSolicitante(cliente.getCorreo());
+            solicitud.setNombreSolicitante(StringUtils.hasText(solicitudForm.getNombreSolicitante())
+                    ? solicitudForm.getNombreSolicitante()
+                    : cliente.getNombre());
+            solicitud.setCorreoSolicitante(StringUtils.hasText(solicitudForm.getCorreoSolicitante())
+                    ? solicitudForm.getCorreoSolicitante()
+                    : cliente.getCorreo());
         } else {
             solicitud.setNombreSolicitante(solicitudForm.getNombreSolicitante());
             solicitud.setCorreoSolicitante(solicitudForm.getCorreoSolicitante());
@@ -195,6 +208,32 @@ public class SolicitudViewController {
         }
 
         return solicitud;
+    }
+
+    private void notificarSolicitudCreada(Solicitud solicitud) {
+        emailService.enviarCorreo(
+                solicitud.getCorreoSolicitante(),
+                "Solicitud recibida",
+                "Hola " + solicitud.getNombreSolicitante() + ",\n\n"
+                        + "Su solicitud fue recibida correctamente.\n"
+                        + "Estado actual: " + solicitud.getEstado().name() + ".\n\n"
+                        + "Gracias por contactarnos."
+        );
+    }
+
+    private void notificarCambioEstado(Solicitud solicitud, EstadoSolicitud estadoAnterior) {
+        if (estadoAnterior == null || estadoAnterior == solicitud.getEstado()) {
+            return;
+        }
+
+        emailService.enviarCorreo(
+                solicitud.getCorreoSolicitante(),
+                "Estado de solicitud actualizado",
+                "Hola " + solicitud.getNombreSolicitante() + ",\n\n"
+                        + "El estado de su solicitud cambio de "
+                        + estadoAnterior.name() + " a " + solicitud.getEstado().name() + ".\n\n"
+                        + "Gracias por contactarnos."
+        );
     }
 
     private Optional<Usuario> currentUsuario() {
