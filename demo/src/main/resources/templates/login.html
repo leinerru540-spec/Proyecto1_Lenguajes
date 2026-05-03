@@ -18,7 +18,7 @@
                 <section class="login-card p-4 p-lg-5">
                     <div class="d-flex align-items-center gap-3 mb-4">
                         <div class="login-accent">
-                            <span aria-hidden="true">JWT</span>
+                            <img src="/images/logo.png" alt="Logo de Consultoria Legal" class="login-logo">
                         </div>
                         <div>
                             <span class="badge text-bg-primary mb-2">Acceso administrador o cliente</span>
@@ -50,7 +50,32 @@
                         </button>
                     </form>
 
-                    <div class="mt-4 pt-4 border-top">
+                    <section class="login-service-panel mt-4">
+                        <div class="service-panel-copy">
+                            <span class="service-kicker">Tu espacio de trabajo</span>
+                            <h2 class="h5 mb-2">Gestiona tus consultorias desde un solo lugar</h2>
+                            <p class="text-secondary mb-0">
+                                Revisa servicios disponibles, registra solicitudes y da seguimiento a cada tramite
+                                con una experiencia clara para clientes y administradores.
+                            </p>
+                        </div>
+                        <div class="service-feature-list">
+                            <div class="service-feature-item">
+                                <strong>Consultorias</strong>
+                                <span>Legal, ambiental e industrial</span>
+                            </div>
+                            <div class="service-feature-item">
+                                <strong>Solicitudes</strong>
+                                <span>Registro y control del estado</span>
+                            </div>
+                            <div class="service-feature-item">
+                                <strong>Acceso por rol</strong>
+                                <span>Panel segun tu perfil</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="visually-hidden">
                         <label for="roleResult" class="form-label fw-semibold">Rol detectado</label>
                         <input id="roleResult" class="form-control mb-3" placeholder="Aqui aparecera el rol autenticado." readonly>
 
@@ -59,7 +84,7 @@
                         <p class="text-secondary small mt-2 mb-0">El token queda en una cookie HttpOnly para navegar por las vistas protegidas.</p>
                     </div>
 
-                    <div class="credential-pill p-3 mt-4">
+                    <div class="credential-pill p-3 mt-4 visually-hidden">
                         <div class="d-flex flex-column gap-2">
                             <div class="small text-primary fw-semibold">Credenciales de prueba temporales</div>
                             <div class="small text-dark"><strong>Admin:</strong> admin@demo.com / admin123</div>

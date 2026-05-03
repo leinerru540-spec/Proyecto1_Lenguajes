@@ -1,6 +1,11 @@
 package com.spring.app.controller;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -97,11 +102,19 @@ public class UsuarioViewController {
     }
 
     @PostMapping("/editar/{id}")
-    public String actualizar(@PathVariable Long id, @ModelAttribute UsuarioForm usuarioForm, RedirectAttributes redirectAttributes) {
+    public String actualizar(
+            @PathVariable Long id,
+            @ModelAttribute UsuarioForm usuarioForm,
+            RedirectAttributes redirectAttributes,
+            Authentication authentication,
+            HttpServletResponse response) {
         Usuario usuarioExistente = usuarioService.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
         String previousEmail = usuarioExistente.getEmail();
         boolean wasCliente = usuarioExistente.getRol().getNombre() == NombreRol.CLIENTE;
+        boolean isCurrentUser = authentication != null
+                && authentication.getName() != null
+                && authentication.getName().equalsIgnoreCase(previousEmail);
 
         Rol rol = rolService.findById(usuarioForm.getRolId())
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado con id: " + usuarioForm.getRolId()));
@@ -121,6 +134,15 @@ public class UsuarioViewController {
             clienteService.deleteByCorreo(previousEmail);
         }
         redirectAttributes.addFlashAttribute("successMessage", "Usuario actualizado correctamente.");
+
+        if (isCurrentUser && requiresNewSession(updated, previousEmail)) {
+            clearJwtCookie(response);
+            redirectAttributes.addFlashAttribute(
+                    "successMessage",
+                    "Tu cuenta fue actualizada. Inicia sesion nuevamente para continuar con los cambios aplicados.");
+            return "redirect:/login";
+        }
+
         return "redirect:/vista/usuarios";
     }
 
@@ -134,5 +156,22 @@ public class UsuarioViewController {
         usuarioService.deleteById(id);
         redirectAttributes.addFlashAttribute("successMessage", "Usuario eliminado correctamente.");
         return "redirect:/vista/usuarios";
+    }
+
+    private boolean requiresNewSession(Usuario updated, String previousEmail) {
+        return updated != null
+                && (updated.getRol().getNombre() != NombreRol.ADMINISTRADOR
+                || !updated.getEmail().equalsIgnoreCase(previousEmail));
+    }
+
+    private void clearJwtCookie(HttpServletResponse response) {
+        ResponseCookie jwtCookie = ResponseCookie.from("jwtToken", "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Lax")
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
     }
 }
