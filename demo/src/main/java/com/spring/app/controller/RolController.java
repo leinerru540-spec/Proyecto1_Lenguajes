@@ -1,5 +1,6 @@
 package com.spring.app.controller;
 
+import com.spring.app.dto.RolDTO;
 import com.spring.app.entity.Rol;
 import com.spring.app.repository.RolRepository;
 import org.springframework.http.HttpStatus;
@@ -19,30 +20,43 @@ public class RolController {
     }
 
     @GetMapping
-    public List<Rol> listar() {
-        return rolRepository.findAll();
+    public List<RolDTO> listar() {
+        return rolRepository.findAll().stream()
+                .map(r -> new RolDTO(r.getId(), r.getNombre(), r.getDescripcion()))
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rol> obtener(@PathVariable Long id) {
+    public ResponseEntity<RolDTO> obtener(@PathVariable Long id) {
         return rolRepository.findById(id)
-                .map(ResponseEntity::ok)
+                .map(r -> ResponseEntity.ok(new RolDTO(r.getId(), r.getNombre(), r.getDescripcion())))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Rol> crear(@RequestBody Rol rol) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(rolRepository.save(rol));
+    public ResponseEntity<RolDTO> crear(@RequestBody RolDTO rolDTO) {
+        Rol rol = new Rol();
+        rol.setNombre(rolDTO.getNombre());
+        rol.setDescripcion(rolDTO.getDescripcion());
+
+        Rol saved = rolRepository.save(rol);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new RolDTO(saved.getId(), saved.getNombre(), saved.getDescripcion()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Rol> actualizar(@PathVariable Long id, @RequestBody Rol rol) {
+    public ResponseEntity<RolDTO> actualizar(@PathVariable Long id, @RequestBody RolDTO rolDTO) {
         if (!rolRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
 
+        Rol rol = new Rol();
         rol.setId(id);
-        return ResponseEntity.ok(rolRepository.save(rol));
+        rol.setNombre(rolDTO.getNombre());
+        rol.setDescripcion(rolDTO.getDescripcion());
+
+        Rol updated = rolRepository.save(rol);
+        return ResponseEntity.ok(new RolDTO(updated.getId(), updated.getNombre(), updated.getDescripcion()));
     }
 
     @DeleteMapping("/{id}")
@@ -55,4 +69,5 @@ public class RolController {
         return ResponseEntity.noContent().build();
     }
 }
+
 

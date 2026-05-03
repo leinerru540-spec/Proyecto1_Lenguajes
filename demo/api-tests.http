@@ -1,40 +1,27 @@
 @baseUrl = http://localhost:8080
+@tokenAdmin = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
+@tokenCliente = eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGRlbW8uY29tIiwiaWF0IjoxNzc3ODI0OTIzLCJleHAiOjE3Nzc4Mjg1MjN9.xn1IQRx4jhUpl6azGfZUg6Qep7DWi8BgdZgwMryW7cs
+@usuarioId = 1
 @clienteId = 1
 @consultoriaId = 1
-@usuarioId = 1
 @solicitudId = 1
-@token = PEGA_AQUI_EL_TOKEN
 
-### Login administrador
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "admin@demo.com",
-  "password": "admin123"
-}
-
-### Login cliente
-POST {{baseUrl}}/auth/login
-Content-Type: application/json
-
-{
-  "email": "cliente@demo.com",
-  "password": "cliente123"
-}
+### ============================
+### BLOQUES DE ADMINISTRADOR
+### ============================
 
 ### Listar roles
 GET {{baseUrl}}/roles
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Listar usuarios
 GET {{baseUrl}}/usuarios
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Crear usuario
 POST {{baseUrl}}/usuarios
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 {
   "nombre": "Cliente API",
@@ -44,33 +31,33 @@ Authorization: Bearer {{token}}
 }
 
 ### Obtener usuario por id
-GET {{baseUrl}}/usuarios/{{usuarioId}}
-Authorization: Bearer {{token}}
+GET {{baseUrl}}/usuarios/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Actualizar usuario
-PUT {{baseUrl}}/usuarios/{{usuarioId}}
+PUT {{baseUrl}}/usuarios/7
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 {
-  "nombre": "Cliente API Actualizado",
-  "email": "cliente.api.actualizado@demo.com",
+ "nombre": "Cliente San Jose",
+  "email": "cliente.api@demo.com",
   "password": "cliente123",
   "rolId": 2
 }
 
 ### Eliminar usuario
-DELETE {{baseUrl}}/usuarios/{{usuarioId}}
-Authorization: Bearer {{token}}
+DELETE {{baseUrl}}/usuarios/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Listar clientes
 GET {{baseUrl}}/clientes
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Crear cliente
 POST {{baseUrl}}/clientes
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 {
   "nombre": "Empresa Cliente",
@@ -80,70 +67,82 @@ Authorization: Bearer {{token}}
 }
 
 ### Obtener cliente por id
-GET {{baseUrl}}/clientes/{{clienteId}}
-Authorization: Bearer {{token}}
+GET {{baseUrl}}/clientes/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Actualizar cliente
-PUT {{baseUrl}}/clientes/{{clienteId}}
+PUT {{baseUrl}}/clientes/2
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 {
-  "nombre": "Empresa Cliente Actualizada",
+  "nombre": "Carlos Sanchez",
   "telefono": "8999-9999",
-  "empresa": "Empresa Demo Actualizada",
-  "correo": "contacto.actualizado@empresademo.com"
+  "empresa": "MECO",
+  "correo": "cliente@demo.com"
 }
 
 ### Eliminar cliente
-DELETE {{baseUrl}}/clientes/{{clienteId}}
-Authorization: Bearer {{token}}
+DELETE {{baseUrl}}/clientes/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Listar consultorias
 GET {{baseUrl}}/consultorias
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 ### Crear consultoria
 POST {{baseUrl}}/consultorias
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
 
 {
-  "tipo": "Legal corporativa",
-  "descripcion": "Revision de contrato comercial."
+  "tipo": "Legal",
+  "descripcion": "Revision de contrato."
 }
 
-### Obtener consultoria por id
-GET {{baseUrl}}/consultorias/{{consultoriaId}}
-Authorization: Bearer {{token}}
+### Obtener consultoria por id, aqui se utiliza el token del modulo de consultoria
+GET {{baseUrl}}/consultorias/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyOTUyOSwiZXhwIjoxNzc3ODMzMTI5fQ.BAL_oFEg_TcbtcslSNoBTmTNHup6WcSWRQGFO3VIVpk
 
 ### Actualizar consultoria
-PUT {{baseUrl}}/consultorias/{{consultoriaId}}
+PUT {{baseUrl}}/consultorias/2
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyOTUyOSwiZXhwIjoxNzc3ODMzMTI5fQ.BAL_oFEg_TcbtcslSNoBTmTNHup6WcSWRQGFO3VIVpk
+
 
 {
-  "tipo": "Legal corporativa",
-  "descripcion": "Revision de contrato comercial en proceso."
+  "id": 2,
+  "nombre": "Consultoría Actualizada",
+  "descripcion": "Revisión de contrato comercial en proceso.",
+  "fecha": "2026-05-03",
+  "clienteId": 2,
+  "tipo": "Legal corporativa"
 }
 
+
 ### Eliminar consultoria
-DELETE {{baseUrl}}/consultorias/{{consultoriaId}}
-Authorization: Bearer {{token}}
+DELETE {{baseUrl}}/consultorias/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyOTUyOSwiZXhwIjoxNzc3ODMzMTI5fQ.BAL_oFEg_TcbtcslSNoBTmTNHup6WcSWRQGFO3VIVpk
+
+---
+
+### ============================
+### BLOQUES DE CLIENTE - SOLICITUDES
+### ============================
 
 ### Listar solicitudes
 GET {{baseUrl}}/solicitudes
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGRlbW8uY29tIiwiaWF0IjoxNzc3ODMwMzQzLCJleHAiOjE3Nzc4MzM5NDN9.FZzDoUiw_E0Y9ZxVMrJmJ8iDYuDWqiIW1mzabarXp0Y
 
 ### Crear solicitud
 POST {{baseUrl}}/solicitudes
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGRlbW8uY29tIiwiaWF0IjoxNzc3ODMwMzQzLCJleHAiOjE3Nzc4MzM5NDN9.FZzDoUiw_E0Y9ZxVMrJmJ8iDYuDWqiIW1mzabarXp0Y
 
 {
   "nombreSolicitante": "Cliente Demo",
   "correoSolicitante": "cliente@demo.com",
-  "descripcion": "Solicito seguimiento de la consultoria.",
+  "descripcion": "Solicito seguimiento de la consultoría.",
   "estado": "PENDIENTE",
   "fecha": "2026-04-28",
   "clienteId": 1,
@@ -151,24 +150,28 @@ Authorization: Bearer {{token}}
 }
 
 ### Obtener solicitud por id
-GET {{baseUrl}}/solicitudes/{{solicitudId}}
-Authorization: Bearer {{token}}
+GET {{baseUrl}}/solicitudes/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGRlbW8uY29tIiwiaWF0IjoxNzc3ODMwMzQzLCJleHAiOjE3Nzc4MzM5NDN9.FZzDoUiw_E0Y9ZxVMrJmJ8iDYuDWqiIW1mzabarXp0Y
 
 ### Actualizar solicitud
-PUT {{baseUrl}}/solicitudes/{{solicitudId}}
+PUT {{baseUrl}}/solicitudes/4
 Content-Type: application/json
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGRlbW8uY29tIiwiaWF0IjoxNzc3ODMwMzQzLCJleHAiOjE3Nzc4MzM5NDN9.FZzDoUiw_E0Y9ZxVMrJmJ8iDYuDWqiIW1mzabarXp0Y
+
 
 {
   "nombreSolicitante": "Cliente Demo",
   "correoSolicitante": "cliente@demo.com",
-  "descripcion": "Solicito seguimiento actualizado de la consultoria.",
+  "descripcion": "Solicito seguimiento actualizado de la consultoría.",
   "estado": "EN_PROCESO",
-  "fecha": "2026-04-28",
-  "clienteId": 1,
-  "consultoriaId": 1
+  "fecha": "2026-05-03",
+  "clienteId": 2,
+  "consultoriaId": 1,
+  "usuarioId": 2
 }
 
+
 ### Eliminar solicitud
-DELETE {{baseUrl}}/solicitudes/{{solicitudId}}
-Authorization: Bearer {{token}}
+DELETE {{baseUrl}}/solicitudes/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRlQGRlbW8uY29tIiwiaWF0IjoxNzc3ODMwMzQzLCJleHAiOjE3Nzc4MzM5NDN9.FZzDoUiw_E0Y9ZxVMrJmJ8iDYuDWqiIW1mzabarXp0Y
+
