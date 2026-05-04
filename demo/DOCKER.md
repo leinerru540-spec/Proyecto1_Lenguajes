@@ -1,20 +1,20 @@
 # Ejecucion con Docker
 
-Docker permite levantar la aplicacion Spring Boot y la base de datos MySQL sin configurar MySQL manualmente en cada computadora.
+Docker permite levantar la aplicacion Spring Boot junto con la base de datos MySQL sin tener que instalar ni configurar MySQL manualmente en cada computadora.
 
 ## Requisito
 
-Instalar Docker Desktop y abrirlo antes de ejecutar los comandos.
+Instalar Docker Desktop y asegurarse de que este abierto antes de ejecutar los comandos.
 
 ## Levantar el proyecto
 
-Desde la carpeta `demo`:
+Desde la carpeta `demo` ejecute:
 
 ```bash
 docker compose up --build
 ```
 
-Cuando termine de iniciar, la aplicacion queda disponible en:
+Cuando el proceso termine de iniciar, la aplicacion estara disponible en:
 
 ```text
 http://localhost:8080
@@ -22,25 +22,25 @@ http://localhost:8080
 
 ## Servicios creados
 
-- `proyecto1_app`: aplicacion Spring Boot.
-- `proyecto1_mysql`: base de datos MySQL.
-- `mysql_data`: volumen donde Docker guarda los datos de MySQL.
+- `api`: aplicacion Spring Boot.
+- `db`: base de datos MySQL.
+- `db_data`: volumen donde Docker guarda los datos de MySQL.
 
 ## Base de datos
 
-Docker crea automaticamente la base:
+Docker crea automaticamente la base de datos:
 
 ```text
 proyecto1
 ```
 
-La aplicacion se conecta internamente a MySQL usando:
+Dentro de Docker, la aplicacion se conecta a MySQL usando el nombre del servicio:
 
 ```text
-jdbc:mysql://mysql:3306/proyecto1
+jdbc:mysql://db:3306/proyecto1
 ```
 
-En la computadora, MySQL queda expuesto en el puerto `3307` para evitar choque con un MySQL local que use `3306`.
+En la computadora, MySQL queda expuesto en el puerto `3307` para evitar conflictos con una instalacion local que use el puerto `3306`.
 
 ## Detener el proyecto
 
@@ -48,7 +48,7 @@ En la computadora, MySQL queda expuesto en el puerto `3307` para evitar choque c
 docker compose down
 ```
 
-Si se quieren borrar tambien los datos guardados en MySQL:
+Si tambien desea eliminar los datos almacenados en MySQL:
 
 ```bash
 docker compose down -v
