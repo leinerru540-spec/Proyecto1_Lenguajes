@@ -12,7 +12,7 @@
 
 ### Listar roles
 GET {{baseUrl}}/roles
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3NzgyNTUyOSwiZXhwIjoxNzc3ODI5MTI5fQ.Bh_9kKa3zxtHVnZhha-FfeBi-1ptDW4OpWVoqCtpQTE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBkZW1vLmNvbSIsImlhdCI6MTc3Nzg1NzExOSwiZXhwIjoxNzc3ODYwNzE5fQ.0ZqJ4HL8gkR0s4AAj8c7Hk28KzqddkG3GC1TQwv5gs4
 
 ### Listar usuarios
 GET {{baseUrl}}/usuarios
